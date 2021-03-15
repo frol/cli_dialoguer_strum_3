@@ -173,20 +173,18 @@ impl OfflineArgs {
     fn input_nonce() -> u64 {
         Input::new()
             .with_prompt(
-                "Enter transaction nonce (query the access key information with
+                "Enter transaction nonce (query the access key information with \
                 `near-cli utils view-access-key frol4.testnet ed25519:...` incremented by 1)",
             )
             .interact_text()
             .unwrap()
     }
     fn input_block_hash() -> near_primitives::hash::CryptoHash {
-        let input_block_hash: String = Input::new()
-            .with_prompt("Enter recent block hash:")
+        let input_block_hash: crate::common::BlobAsBase58String<CryptoHash> = Input::new()
+            .with_prompt("Enter recent block hash")
             .interact_text()
             .unwrap();
-        crate::common::BlobAsBase58String::<CryptoHash>::from_str(&input_block_hash)
-            .unwrap()
-            .into_inner()
+        input_block_hash.into_inner()
     }
 }
 
