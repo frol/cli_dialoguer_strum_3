@@ -1,116 +1,102 @@
-use dialoguer::{theme::ColorfulTheme, Select};
-use structopt::StructOpt;
-use strum::{EnumDiscriminants, EnumIter, EnumMessage, IntoEnumIterator};
+use clap::Clap;
+use shell_words;
 
+use common::{try_external_subcommand_execution, CliResult};
+
+mod commands;
 mod common;
-mod utils_command;
-use utils_command::{CliUtilType, UtilList, UtilType};
-mod construct_transaction_command;
 mod consts;
-use construct_transaction_command::operation_mode::{CliOperationMode, Mode, OperationMode};
 
-#[derive(Debug)]
-struct Args {
-    subcommand: ArgsCommand,
+/// near-cli is a toolbox for interacting with NEAR protocol
+#[derive(Debug, Clap)]
+#[clap(
+    version,
+    author,
+    about,
+    setting(clap::AppSettings::ColoredHelp),
+    setting(clap::AppSettings::DisableHelpSubcommand),
+    setting(clap::AppSettings::VersionlessSubcommands),
+    // setting(clap::AppSettings::NextLineHelp)
+)]
+struct CliArgs {
+    #[clap(subcommand)]
+    top_level_command: Option<self::commands::CliTopLevelCommand>,
 }
 
-#[derive(Debug, Default, StructOpt)]
-struct CliArgs {
-    #[structopt(subcommand)]
-    subcommand: Option<CliCommand>,
+#[derive(Debug, Clone)]
+struct Args {
+    top_level_command: self::commands::TopLevelCommand,
+}
+
+impl CliArgs {
+    pub fn to_cli_args(&self) -> std::collections::VecDeque<String> {
+        let mut args = self
+            .top_level_command
+            .as_ref()
+            .map(|subcommand| subcommand.to_cli_args())
+            .unwrap_or_default();
+        args.push_front("./near-cli".to_owned());
+        args
+    }
+}
+
+impl From<Args> for CliArgs {
+    fn from(cli_args: Args) -> Self {
+        Self {
+            top_level_command: Some(cli_args.top_level_command.into()),
+        }
+    }
 }
 
 impl From<CliArgs> for Args {
-    fn from(item: CliArgs) -> Self {
-        let subcommand = match item.subcommand {
-            Some(cli_subcommand) => ArgsCommand::from(cli_subcommand),
-            None => ArgsCommand::choose_command(),
+    fn from(cli_args: CliArgs) -> Self {
+        let top_level_command = match cli_args.top_level_command {
+            Some(cli_subcommand) => self::commands::TopLevelCommand::from(cli_subcommand),
+            None => self::commands::TopLevelCommand::choose_command(),
         };
-        Self { subcommand }
+        Self { top_level_command }
     }
 }
 
 impl Args {
-    async fn process(self) {
-        match self.subcommand {
-            ArgsCommand::ConstructTransaction(mode) => {
-                let unsigned_transaction = near_primitives::transaction::Transaction {
-                    signer_id: "".to_string(),
-                    public_key: near_crypto::PublicKey::empty(near_crypto::KeyType::ED25519),
-                    nonce: 0,
-                    receiver_id: "".to_string(),
-                    block_hash: Default::default(),
-                    actions: vec![],
-                };
-                mode.process(unsigned_transaction).await;
-            }
-            ArgsCommand::Utils(util_type) => util_type.process(),
-        }
+    async fn process(self) -> CliResult {
+        self.top_level_command.process().await
     }
 }
 
-#[derive(Debug, StructOpt)]
-pub enum CliCommand {
-    ConstructTransaction(CliOperationMode),
-    Utils(CliUtilType),
-}
-
-#[derive(Debug, EnumDiscriminants)]
-#[strum_discriminants(derive(EnumMessage, EnumIter))]
-pub enum ArgsCommand {
-    #[strum_discriminants(strum(message = "Construct a new transaction"))]
-    ConstructTransaction(OperationMode),
-    #[strum_discriminants(strum(message = "Helpers"))]
-    Utils(UtilType),
-}
-
-impl From<CliCommand> for ArgsCommand {
-    fn from(item: CliCommand) -> Self {
-        match item {
-            CliCommand::ConstructTransaction(cli_operation_mode) => {
-                let operation_mode = OperationMode::from(cli_operation_mode);
-                ArgsCommand::ConstructTransaction(operation_mode)
+fn main() -> CliResult {
+    let cli = match CliArgs::try_parse() {
+        Ok(cli) => cli,
+        Err(error) => {
+            if matches!(
+                error.kind,
+                clap::ErrorKind::UnknownArgument | clap::ErrorKind::InvalidSubcommand
+            ) {
+                return try_external_subcommand_execution();
             }
-            CliCommand::Utils(cli_util_type) => {
-                let util_type = UtilType::from(cli_util_type);
-                ArgsCommand::Utils(util_type)
-            }
+            return Err(color_eyre::eyre::eyre!(error));
         }
-    }
-}
+    };
 
-impl ArgsCommand {
-    pub fn choose_command() -> Self {
-        println!();
-        let variants = ArgsCommandDiscriminants::iter().collect::<Vec<_>>();
-        let commands = variants
-            .iter()
-            .map(|p| p.get_message().unwrap().to_owned())
-            .collect::<Vec<_>>();
-        let selection = Select::with_theme(&ColorfulTheme::default())
-            .with_prompt("Choose your action")
-            .items(&commands)
-            .default(0)
-            .interact()
-            .unwrap();
-        match variants[selection] {
-            ArgsCommandDiscriminants::ConstructTransaction => {
-                Self::ConstructTransaction(OperationMode {
-                    mode: Mode::choose_mode(),
-                })
-            }
-            ArgsCommandDiscriminants::Utils => Self::Utils(UtilType {
-                util: UtilList::choose_util(),
-            }),
-        }
+    if let Some(self::commands::CliTopLevelCommand::GenerateShellCompletions(subcommand)) =
+        cli.top_level_command
+    {
+        subcommand.process();
+        return Ok(());
     }
-}
 
-fn main() {
-    let cli = CliArgs::from_args();
     let args = Args::from(cli);
 
-    actix::System::builder()
-        .build()
-        .block_on(async move { args.process().await });
+    let completed_cli = CliArgs::from(args.clone());
+
+    color_eyre::install()?;
+
+    let process_result = actix::System::new().block_on(args.process());
+
+    println!(
+        "Your console command:\n{}",
+        shell_words::join(&completed_cli.to_cli_args())
+    );
+
+    process_result
 }

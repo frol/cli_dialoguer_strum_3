@@ -1,13 +1,14 @@
 [package]
-name = "my-near-cli-dialoguer-strum-3"
-version = "0.1.0"
+name = "near-cli"
+version = "0.1.13"
 authors = ["FroVolod <frol_off@meta.ua>"]
 edition = "2018"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-structopt = "0.3"
+clap = "3.0.0-beta.2"
+clap_generate = "3.0.0-beta.2"
 dialoguer = "0.7"
 # strum = "0.20"
 strum = { git = "https://github.com/frol/strum", branch = "feat/discriminants-pass-through-attributes", features = ["derive"] }
@@ -17,28 +18,33 @@ derive_more = "0.99.9"
 
 async-recursion = "0.3.2"
 
-actix = "0.9"
-actix-rt = "1"
-actix-web = { version = "2", features = [ "openssl" ] }
+actix = "0.11.0-beta.2"
+actix-web = { version = "4.0.0-beta.6", features = [ "openssl" ] }
 openssl-probe = { version = "0.1.2" }
 
 base64 = "0.12.3"
-bip39 = { version = "1.0.0-rc.1", features = [ "rand" ] }
+bip39 = { version = "1.0.0", features = [ "rand" ] }
 bs58 = "0.3"
 ed25519-dalek = { version = "1" }
 hex = "0.4.2"
+serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0.57"
-# The fix is needed for seemless clap integration: https://github.com/wusyong/slip10/pull/3
-slip10 = { git = "https://github.com/frol/slip10", rev = "a3235dd0acf3a485f547cf23e2dd56838adb45f8" }
-
-
-# near-crypto = { git = "https://github.com/nearprotocol/nearcore", rev="1cb93029cb41d224b1a6c77caf90414ff64e3d47" }
-# near-primitives = { git = "https://github.com/nearprotocol/nearcore", rev="1cb93029cb41d224b1a6c77caf90414ff64e3d47" }
-# near-jsonrpc-client = { git = "https://github.com/nearprotocol/nearcore", rev="1cb93029cb41d224b1a6c77caf90414ff64e3d47" }
-
-
-near-crypto = { git = "https://github.com/nearprotocol/nearcore", rev="29fcaf3b8c81a4c0371d105054ce251355382a77" }
-near-primitives = { git = "https://github.com/nearprotocol/nearcore", rev="29fcaf3b8c81a4c0371d105054ce251355382a77" }
-near-jsonrpc-client = { git = "https://github.com/nearprotocol/nearcore", rev="29fcaf3b8c81a4c0371d105054ce251355382a77" }
-
+dirs = "3.0"
+slip10 = "0.4.3"
 url = { version = "2", features = ["serde"] }
+url_open = "0.0.1"
+shell-words = "1.0.0"
+cargo-util = "0.1.1"
+
+color-eyre = "0.5"
+
+near-ledger = { version = "0.1.1", optional = true }
+
+near-crypto = { git = "https://github.com/near/nearcore", rev="e242f71400111fe99a825fd8f5e53a82802c98b7" }
+near-primitives = { git = "https://github.com/near/nearcore", rev="e242f71400111fe99a825fd8f5e53a82802c98b7" }
+near-jsonrpc-client = { git = "https://github.com/near/nearcore", rev="e242f71400111fe99a825fd8f5e53a82802c98b7" }
+near-jsonrpc-primitives = { git = "https://github.com/near/nearcore", rev="e242f71400111fe99a825fd8f5e53a82802c98b7" }
+
+[features]
+default = ["ledger"]
+ledger = ["near-ledger"]

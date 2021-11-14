@@ -1,0 +1,5 @@
+#!/bin/sh
+
+mkdir -p stage
+sed 's/sudo //' ../../ubuntu-install-packages > ./stage/ubuntu-install-packages
+docker build -t frolvlad/near-cli-rs-cross:x86_64-unknown-linux-musl .

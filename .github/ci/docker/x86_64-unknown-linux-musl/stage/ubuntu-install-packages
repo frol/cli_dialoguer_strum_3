@@ -1,0 +1,15 @@
+#!/bin/sh
+
+apt-get update
+apt-get install -yy \
+  asciidoctor \
+  zsh xz-utils liblz4-tool musl-tools \
+  git \
+  cmake \
+  g++ \
+  pkg-config \
+  libssl-dev \
+  curl \
+  llvm \
+  clang
+
