@@ -1,7 +1,7 @@
 #!/bin/sh
 
-sudo apt-get update
-sudo apt-get install -yy \
+apt-get update
+apt-get install -yy \
   asciidoctor \
   zsh xz-utils liblz4-tool musl-tools \
   git \
