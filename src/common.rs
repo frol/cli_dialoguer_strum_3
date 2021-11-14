@@ -440,7 +440,7 @@ pub fn get_account_transfer_allowance(
                 .EXPERIMENTAL_protocol_config(
                     near_jsonrpc_primitives::types::config::RpcProtocolConfigRequest {
                         block_reference:
-                            near_jsonrpc_primitives::types::blocks::BlockReference::Finality(
+                            near_primitives::types::BlockReference::Finality(
                                 near_primitives::types::Finality::Final,
                             ),
                     },
