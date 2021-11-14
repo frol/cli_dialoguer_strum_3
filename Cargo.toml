@@ -21,7 +21,8 @@ async-recursion = "0.3.2"
 
 actix = "0.11.0-beta.2"
 actix-web = { version = "4.0.0-beta.6", features = [ "openssl" ] }
-openssl-probe = { version = "0.1.2" }
+openssl = { version = "0.10", features = [ "vendored" ] }
+#openssl-probe = { version = "0.1.2" }
 
 base64 = "0.12.3"
 bip39 = { version = "1.0.0", features = [ "rand" ] }
