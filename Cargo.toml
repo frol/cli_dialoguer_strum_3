@@ -38,9 +38,13 @@ cargo-util = "0.1.1"
 
 color-eyre = "0.5"
 
-near-ledger = "0.1.1"
+near-ledger = { version = "0.1.1", optional = true }
 
 near-crypto = { git = "https://github.com/near/nearcore", rev="e242f71400111fe99a825fd8f5e53a82802c98b7" }
 near-primitives = { git = "https://github.com/near/nearcore", rev="e242f71400111fe99a825fd8f5e53a82802c98b7" }
 near-jsonrpc-client = { git = "https://github.com/near/nearcore", rev="e242f71400111fe99a825fd8f5e53a82802c98b7" }
 near-jsonrpc-primitives = { git = "https://github.com/near/nearcore", rev="e242f71400111fe99a825fd8f5e53a82802c98b7" }
+
+[features]
+default = ["ledger"]
+ledger = ["near-ledger"]

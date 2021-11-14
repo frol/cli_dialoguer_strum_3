@@ -1,5 +1,5 @@
 #!/bin/sh
 
 mkdir -p stage
-cp ../../ubuntu-install-packages ./stage/
-docker build -t burntsushi/cross:x86_64-unknown-linux-musl .
+sed 's/sudo //' ../../ubuntu-install-packages > ./stage/ubuntu-install-packages
+docker build -t frolvlad/near-cli-rs-cross:x86_64-unknown-linux-musl .
