@@ -125,6 +125,7 @@ jobs:
         echo "target flag is: ${{ env.TARGET_FLAGS }}"
     
     - name: Build near-cli and all crates
+      if: always()
       run: ${{ env.CARGO }} build --verbose --all ${{ env.TARGET_FLAGS }} ${{ env.FEATURES_FLAGS }}
 
     - name: Run tests (sans cross)
