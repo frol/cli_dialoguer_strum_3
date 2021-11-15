@@ -42,10 +42,10 @@ color-eyre = "0.5"
 
 near-ledger = { version = "0.1.1", optional = true }
 
-near-crypto = { git = "https://github.com/near/nearcore", rev="c99f6aa3855f076774bc0d001db2090f4d9891ce" }
-near-primitives = { git = "https://github.com/near/nearcore", rev="c99f6aa3855f076774bc0d001db2090f4d9891ce" }
-near-jsonrpc-client = { git = "https://github.com/near/nearcore", rev="c99f6aa3855f076774bc0d001db2090f4d9891ce" }
-near-jsonrpc-primitives = { git = "https://github.com/near/nearcore", rev="c99f6aa3855f076774bc0d001db2090f4d9891ce" }
+near-crypto = { git = "https://github.com/near/nearcore", rev="7943a0bc8252d414d98af64644f7756ea7d9e06b" }
+near-primitives = { git = "https://github.com/near/nearcore", rev="7943a0bc8252d414d98af64644f7756ea7d9e06b" }
+near-jsonrpc-client = { git = "https://github.com/near/nearcore", rev="7943a0bc8252d414d98af64644f7756ea7d9e06b" }
+near-jsonrpc-primitives = { git = "https://github.com/near/nearcore", rev="7943a0bc8252d414d98af64644f7756ea7d9e06b" }
 
 [features]
 default = ["ledger"]
