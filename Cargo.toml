@@ -34,7 +34,8 @@ serde_json = "1.0.57"
 dirs = "3.0"
 slip10 = "0.4.3"
 url = { version = "2", features = ["serde"] }
-url_open = "0.0.1"
+# Fixed Windows support (consider migrating to `open` crate)
+url_open = { git = "https://github.com/fschutt/url_open", rev="5d4b36bff66ed87dbecaaa75ad6cd7104a3c348e" }
 shell-words = "1.0.0"
 cargo-util = "0.1.1"
 

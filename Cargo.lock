@@ -3234,8 +3234,7 @@ dependencies = [
 [[package]]
 name = "url_open"
 version = "0.0.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ae0b8a775e36e692c64e6a15a5cd854cc58dee7636d380b07738f6f816e3dc78"
+source = "git+https://github.com/fschutt/url_open?rev=5d4b36bff66ed87dbecaaa75ad6cd7104a3c348e#5d4b36bff66ed87dbecaaa75ad6cd7104a3c348e"
 dependencies = [
  "url",
  "winapi",
