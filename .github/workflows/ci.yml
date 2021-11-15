@@ -133,10 +133,12 @@ jobs:
       run: ${{ env.CARGO }} test --verbose --all ${{ env.FEATURES_FLAGS }}
     
     - name: View contract code for 'volodymyr.testnet'
+      if: matrix.target == ''
       run: |
         ${{ env.TARGET_DIR }}/debug/near-cli view contract-code network testnet contract 'volodymyr.testnet' hash at-final-block
     
     - name: Transfer NEAR Tokens
+      if: matrix.target == ''
       run: |
         ${{ env.TARGET_DIR }}/debug/near-cli transfer near network testnet sender volodymyr.testnet receiver 21.volodymyr.testnet \
         amount 0.001NEAR sign-private-key --signer-public-key ed25519:Ebx7NiwqupsshnUsEZCzgm84SQqi8LZWJx7ermrr14JF \
