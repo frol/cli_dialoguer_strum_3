@@ -1051,16 +1051,15 @@ pub fn try_external_subcommand_execution() -> CliResult {
 }
 
 fn is_executable<P: AsRef<std::path::Path>>(path: P) -> bool {
-    if cfg!(target_family = "unix") {
+    #[cfg(target_family = "unix")]
+    {
         use std::os::unix::prelude::*;
         std::fs::metadata(path)
             .map(|metadata| metadata.is_file() && metadata.permissions().mode() & 0o111 != 0)
             .unwrap_or(false)
-    } else if cfg!(target_family = "windows") {
-        path.as_ref().is_file()
-    } else {
-        panic!("Unsupported for wasm");
     }
+    #[cfg(target_family = "windows")]
+    path.as_ref().is_file()
 }
 
 fn path_directories() -> Vec<std::path::PathBuf> {
