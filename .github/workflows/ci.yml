@@ -114,7 +114,7 @@ jobs:
         echo "TARGET_FLAGS=--target ${{ matrix.target }}" >> $GITHUB_ENV
         echo "TARGET_DIR=./target/${{ matrix.target }}" >> $GITHUB_ENV
 
-    - name: Disable Ledger support for static linux-musl builds
+    - name: Disable Ledger support for platforms that don't have udev
       if: matrix.target == 'x86_64-unknown-linux-musl' || matrix.target == 'arm-unknown-linux-gnueabihf'
       run: |
         echo "FEATURES_FLAGS=--no-default-features" >> $GITHUB_ENV
