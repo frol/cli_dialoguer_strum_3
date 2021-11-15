@@ -90,7 +90,7 @@ impl Server {
             "If your browser doesn't automatically open, please visit this URL:\n {}\n",
             &url.as_str()
         );
-        open::that(url.as_ref());
+        open::that(url.as_ref()).ok();
 
         let public_key: near_crypto::PublicKey =
             near_crypto::PublicKey::from_str(&key_pair_properties.public_key_str)?;
