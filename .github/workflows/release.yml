@@ -56,6 +56,8 @@ jobs:
       TARGET_FLAGS: --target matrix.target
       # When CARGO is set to CROSS, TARGET_DIR includes matrix.target.
       TARGET_DIR: ./target
+      # For some builds, we disable ledger support
+      FEATURES_FLAGS:
       # Emit backtraces on panics.
       RUST_BACKTRACE: 1
         Build static releases with PCRE2.
