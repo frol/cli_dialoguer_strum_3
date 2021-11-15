@@ -439,10 +439,9 @@ pub fn get_account_transfer_allowance(
             near_jsonrpc_client::new_client(connection_config.rpc_url().as_str())
                 .EXPERIMENTAL_protocol_config(
                     near_jsonrpc_primitives::types::config::RpcProtocolConfigRequest {
-                        block_reference:
-                            near_primitives::types::BlockReference::Finality(
-                                near_primitives::types::Finality::Final,
-                            ),
+                        block_reference: near_primitives::types::BlockReference::Finality(
+                            near_primitives::types::Finality::Final,
+                        ),
                     },
                 )
                 .await
