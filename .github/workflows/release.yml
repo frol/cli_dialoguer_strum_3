@@ -60,7 +60,7 @@ jobs:
       FEATURES_FLAGS:
       # Emit backtraces on panics.
       RUST_BACKTRACE: 1
-        Build static releases with PCRE2.
+      # Build static releases with PCRE2.
       PCRE2_SYS_STATIC: 1
     strategy:
       matrix:
@@ -166,7 +166,7 @@ jobs:
         echo "release version: $RELEASE_VERSION"
 
     - name: Build release binary
-      run: ${{ env.CARGO }} build --verbose --release --target-dir ${{ env.TARGET_DIR }} ${{ env.FEATURES_FLAGS }}
+      run: ${{ env.CARGO }} build --verbose --release ${{ env.TARGET_FLAGS }} ${{ env.FEATURES_FLAGS }}
 
     - name: Strip release binary (linux and macos)
       if: matrix.build == 'linux' || matrix.build == 'macos'
