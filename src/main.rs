@@ -65,7 +65,6 @@ impl Args {
 }
 
 fn main() -> CliResult {
-    openssl_probe::init_ssl_cert_env_vars();
     color_eyre::install()?;
 
     let cli = match CliArgs::try_parse() {
