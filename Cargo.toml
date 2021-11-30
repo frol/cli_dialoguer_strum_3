@@ -22,6 +22,8 @@ async-recursion = "0.3.2"
 actix = "0.12"
 actix-web = { version = "=4.0.0-beta.6", features = [ "rustls" ] }
 actix-tls = { version = "=3.0.0-beta.5" }
+# Ad-hoc fix for compilation errors (rustls is used instead of openssl to ease the deployment avoiding the system dependency on openssl)
+openssl = { version = "0.10", features = [ "vendored" ] }
 
 base64 = "0.12.3"
 bip39 = { version = "1.0.0", features = [ "rand" ] }
