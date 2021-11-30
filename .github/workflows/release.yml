@@ -184,11 +184,11 @@ jobs:
         cp -a "docs"/* "$staging/docs/"
 
         if [ "${{ matrix.os }}" = "windows-2019" ]; then
-          cp "${{ matrix.TARGET_DIR }}/release/near-cli.exe" "$staging/"
+          cp "${{ env.TARGET_DIR }}/release/near-cli.exe" "$staging/"
           7z a "$staging.zip" "$staging"
           echo "ASSET=$staging.zip" >> $GITHUB_ENV
         else
-          cp "${{ matrix.TARGET_DIR }}/release/near-cli" "$staging/"
+          cp "${{ env.TARGET_DIR }}/release/near-cli" "$staging/"
           tar czf "$staging.tar.gz" "$staging"
           echo "ASSET=$staging.tar.gz" >> $GITHUB_ENV
         fi
