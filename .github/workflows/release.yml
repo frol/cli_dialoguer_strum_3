@@ -82,10 +82,6 @@ jobs:
           os: windows-2019
           rust: nightly
           target: x86_64-pc-windows-msvc
-        - build: win-gnu
-          os: windows-2019
-          rust: nightly-x86_64-gnu
-          target: x86_64-pc-windows-gnu
         - build: win32-msvc
           os: windows-2019
           rust: nightly
@@ -188,11 +184,11 @@ jobs:
         cp -a "docs"/* "$staging/docs/"
 
         if [ "${{ matrix.os }}" = "windows-2019" ]; then
-          cp "target/${{ matrix.target }}/release/near-cli.exe" "$staging/"
+          cp "${{ matrix.TARGET_DIR }}/release/near-cli.exe" "$staging/"
           7z a "$staging.zip" "$staging"
           echo "ASSET=$staging.zip" >> $GITHUB_ENV
         else
-          cp "target/${{ matrix.target }}/release/near-cli" "$staging/"
+          cp "${{ matrix.TARGET_DIR }}/release/near-cli" "$staging/"
           tar czf "$staging.tar.gz" "$staging"
           echo "ASSET=$staging.tar.gz" >> $GITHUB_ENV
         fi
