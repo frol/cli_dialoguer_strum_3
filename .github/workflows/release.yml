@@ -97,28 +97,6 @@ jobs:
       with:
         fetch-depth: 1
 
-    - name: Install packages (Ubuntu)
-      if: matrix.os == 'ubuntu-18.04'
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y \
-          asciidoctor \
-          zsh xz-utils liblz4-tool musl-tools \
-          git \
-          cmake \
-          g++ \
-          pkg-config \
-          libssl-dev \
-          curl \
-          llvm \
-          clang \
-          libudev-dev
-
-    - name: Install packages (macOS)
-      if: matrix.os == 'macos-latest'
-      run: |
-        .github/ci/macos-install-packages
-
     - name: Install Rust
       uses: actions-rs/toolchain@v1
       with:
@@ -128,7 +106,6 @@ jobs:
         target: ${{ matrix.target }}
 
     - name: Use Cross
-      if: matrix.target != ''
       run: |
         cargo install cross
         echo "CARGO=cross" >> $GITHUB_ENV
