@@ -90,7 +90,7 @@ jobs:
       run: ${{ env.CARGO }} build --verbose --all ${{ env.TARGET_FLAGS }} ${{ env.FEATURES_FLAGS }}
 
     - name: Run tests
-      run: ${{ env.CARGO }} test --verbose --all ${{ env.FEATURES_FLAGS }}
+      run: ${{ env.CARGO }} test --verbose --all ${{ env.TARGET_FLAGS }} ${{ env.FEATURES_FLAGS }}
     
     - name: View contract code for 'volodymyr.testnet'
       if: matrix.build != 'linux-arm'
